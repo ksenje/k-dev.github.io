@@ -686,6 +686,22 @@
   }
 }
 
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .anim-float {
   animation: float-y 7s ease-in-out infinite;
 }
@@ -704,6 +720,15 @@
 
 .anim-scanline {
   animation: scanline 6s linear infinite;
+}
+
+.anim-spin-slow {
+  transform-origin: center;
+  animation: spin-slow 9s linear infinite;
+}
+
+.anim-glow-pulse {
+  animation: glow-pulse 4.5s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

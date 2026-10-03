@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { navItems, identity } from '../../data/site'
 import { easeSpring, springSoft, useRevealProps } from '../../lib/motion'
 import { ArrowIcon, CloseIcon } from '../ui/Icons'
+import avatarUrl from '../../assets/avatar.jpg'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -65,11 +66,20 @@ export function Navbar() {
           className="group flex items-center gap-2.5 px-1 py-1"
           onClick={() => setOpen(false)}
         >
-          <span className="relative grid h-8 w-8 place-items-center rounded-full border border-white/12 bg-white/6">
-            <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.45),transparent_60%)]" />
-            <span className="relative font-mono text-[0.7rem] font-medium tracking-tight text-frost-50">
-              k
-            </span>
+          <span className="relative grid h-8 w-8 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/6">
+            <img
+              src={avatarUrl}
+              alt=""
+              width={64}
+              height={64}
+              decoding="async"
+              className="h-full w-full rounded-full object-cover"
+            />
+            <span
+              className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.4),transparent_55%)]"
+              aria-hidden="true"
+            />
+            <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-white/20 ring-inset" aria-hidden="true" />
           </span>
           <span className="text-[0.95rem] font-medium tracking-tight text-frost-50">{identity.name}</span>
         </a>

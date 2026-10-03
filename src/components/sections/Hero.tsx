@@ -86,6 +86,22 @@ export function Hero() {
                     'radial-gradient(circle at 50% 35%, rgba(236,238,242,0.14), rgba(182,176,196,0.08) 55%, transparent 72%)',
                 }}
               />
+              <div
+                className="anim-spin-slow pointer-events-none absolute -inset-1/2 -z-10"
+                aria-hidden="true"
+                style={{
+                  background:
+                    'conic-gradient(from 0deg, transparent 0 62%, rgba(236,238,242,0.5) 74%, rgba(182,176,196,0.45) 82%, transparent 92% 100%)',
+                }}
+              />
+              <div
+                className="anim-glow-pulse pointer-events-none absolute inset-0 -z-10 rounded-full"
+                aria-hidden="true"
+                style={{
+                  background:
+                    'radial-gradient(circle at 50% 50%, transparent 62%, rgba(236,238,242,0.28) 78%, transparent 88%)',
+                }}
+              />
               <img
                 src={avatarUrl}
                 alt={`${name} — ${role}`}
@@ -93,7 +109,7 @@ export function Hero() {
                 height={640}
                 fetchPriority="high"
                 decoding="async"
-                className="aspect-square w-full rounded-full object-cover"
+                className="relative aspect-square w-full rounded-full object-cover"
               />
             </div>
             <div className="hairline mx-auto mt-6 w-24" />
