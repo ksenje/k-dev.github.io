@@ -74,23 +74,16 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return
     navigator.mediaSession.metadata = new MediaMetadata({
       title: track.title,
-      artist: track.artist,
-      artwork: track.coverUrl
-        ? [
-            {
-              src: new URL(track.coverUrl, window.location.origin).href,
-              sizes: '512x512',
-              type: 'image/jpeg',
-            },
-          ]
-        : [],
+      artist: 'ксенже',
+      album: 'Музыка',
     })
   }, [])
 
-  // A single audio element for the whole site: source is attached on demand.
+  // A single audio element for the whole site: nothing is fetched until a track
+  // is picked, and only the active file is ever buffered.
   useEffect(() => {
     const audio = new Audio()
-    audio.preload = 'metadata'
+    audio.preload = 'none'
     audioRef.current = audio
 
     const onTime = () => setCurrentTime(audio.currentTime)

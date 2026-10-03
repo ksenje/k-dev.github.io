@@ -12,8 +12,13 @@ export const identity = {
 /** Public contact details. Only channels that are meant to be seen by anyone. */
 export const contacts = {
   telegram: { label: '@root_me', url: 'https://t.me/root_me' },
-  payments: { label: '@send', url: 'https://t.me/send' },
-  crypto: { label: '@xrocket', url: 'https://t.me/xrocket' },
+  vk: { label: '@rooot_me', url: 'https://vk.com/rooot_me' },
+}
+
+/** Public payment details. TON address is a public receive address, never a private key. */
+export const payments = {
+  xrocket: { label: '@xrocket', url: 'https://t.me/xrocket', title: 'xRocket' },
+  send: { label: '@send', url: 'https://t.me/send', title: 'Send' },
   ton: 'UQCSCCAhJySGUarWjxXLP0Fx6YTnh6_n_vrpJ3zuL-_7ANml',
 }
 
@@ -23,6 +28,7 @@ export const navItems: NavItem[] = [
   { label: 'Главная', href: '#home' },
   { label: 'Обо мне', href: '#about' },
   { label: 'Музыка', href: '#music' },
+  { label: 'Реквизиты', href: '#payments' },
   { label: 'Контакты', href: '#contact' },
 ]
 
@@ -64,6 +70,28 @@ export const skills = {
 export const music = {
   eyebrow: 'Музыка',
   title: 'Музыка',
+  description: 'Плеер находится в этой секции и прокручивается вместе со страницей.',
+  emptyTitle: 'Каталог пуст',
+  playLabel: 'Слушать',
+  pauseLabel: 'Пауза',
+  previousLabel: 'Предыдущий трек',
+  nextLabel: 'Следующий трек',
+  progressLabel: 'Позиция воспроизведения',
+  volumeLabel: 'Громкость',
+  muteOnLabel: 'Включить звук',
+  muteOffLabel: 'Выключить звук',
+  idleTitle: 'Нажмите Play',
+}
+
+export const paymentsSection = {
+  eyebrow: 'Реквизиты',
+  title: 'Оплата',
+  highlight: 'и переводы',
+  text: 'Принимаю оплату в TON, xRocket и Send.',
+  tonLabel: 'TON адрес',
+  copyLabel: 'Скопировать',
+  copiedLabel: 'Скопировано',
+  openLabel: 'Открыть',
 }
 
 export const contact = {
@@ -71,13 +99,9 @@ export const contact = {
   title: 'Связаться',
   highlight: 'со мной',
   text: 'Напишите в Telegram, если хотите обсудить проект или задачу.',
-  button: 'Связаться',
+  button: 'Написать в Telegram',
   channels: [
-    { key: 'telegram', label: 'Telegram', cta: 'Написать' },
-    { key: 'payments', label: 'Платежи', cta: 'Открыть' },
-    { key: 'crypto', label: 'Крипта', cta: 'Открыть' },
-  ] as const,
-  tonLabel: 'TON адрес',
-  copyLabel: 'Скопировать',
-  copiedLabel: 'Скопировано',
+    { key: 'telegram', title: 'Telegram', handle: '@root_me', url: 'https://t.me/root_me', cta: 'Написать' },
+    { key: 'vk', title: 'VK', handle: '@rooot_me', url: 'https://vk.com/rooot_me', cta: 'Открыть' },
+  ],
 }

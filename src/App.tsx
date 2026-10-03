@@ -8,15 +8,14 @@ import { Footer } from './components/layout/Footer'
 import { Hero } from './components/sections/Hero'
 import { About } from './components/sections/About'
 import { Music } from './components/sections/Music'
+import { Payments } from './components/sections/Payments'
 import { Skills } from './components/sections/Skills'
 import { Contact } from './components/sections/Contact'
-import { MusicPlayer } from './components/music/MusicPlayer'
 import { useCustomCursorEnabled } from './lib/pointer'
 import { usePrefersReducedMotion } from './hooks/useEnvironment'
 
 export default function App() {
   useCustomCursorEnabled()
-  const reduced = usePrefersReducedMotion()
 
   return (
     <div className="relative min-h-screen">
@@ -24,10 +23,8 @@ export default function App() {
 
       <AuroraBackground />
 
-      {/* snow behind the glass */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <Snowfall layer="back" />
-      </div>
+      {/* one canvas for all snow depths */}
+      <Snowfall />
 
       <CursorLight />
 
@@ -38,20 +35,11 @@ export default function App() {
         <About />
         <Music />
         <Skills />
+        <Payments />
         <Contact />
       </main>
 
       <Footer />
-
-      <MusicPlayer />
-
-      {/* snow drifting in front of the glass panels */}
-      {!reduced ? (
-        <div className="pointer-events-none fixed inset-0 z-[60]">
-          <Snowfall layer="mid" opacity={0.45} />
-          <Snowfall layer="front" opacity={0.6} />
-        </div>
-      ) : null}
 
       <CustomCursor />
     </div>

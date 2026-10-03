@@ -103,6 +103,8 @@
     --glass-sat: 170%;
     position: relative;
     isolation: isolate;
+    /* Every reflection, rim and decorative layer stays inside the material. */
+    overflow: clip;
     border: 1px solid transparent;
     background-color: transparent;
     background-image:
@@ -176,11 +178,11 @@
     opacity: 1;
   }
 
-  /* Slow drifting internal reflection, keeps the material alive */
+  /* Slow drifting internal reflection, clipped to the material by .glass */
   .glass-light::after {
     content: '';
     position: absolute;
-    inset: -40%;
+    inset: 0;
     z-index: -1;
     border-radius: inherit;
     pointer-events: none;
@@ -248,6 +250,49 @@
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass {
       --glass-tint: rgba(10, 10, 12, 0.86);
+    }
+  }
+
+  /* Touch devices: same material, far cheaper to rasterise. Backdrop blur and
+     animated background repaints are the most expensive effects on phones. */
+  @media (hover: none), (pointer: coarse) {
+    .glass {
+      --glass-blur: 8px;
+      --glass-sat: 140%;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+        0 16px 36px -30px rgba(0, 0, 0, 0.9);
+    }
+
+    .glass-soft {
+      --glass-blur: 6px;
+    }
+
+    .glass-strong {
+      --glass-blur: 10px;
+      --glass-sat: 150%;
+    }
+
+    .glass-deep {
+      --glass-blur: 10px;
+      --glass-sat: 130%;
+    }
+
+    .btn {
+      backdrop-filter: blur(6px) saturate(120%);
+      -webkit-backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    /* Static sheen instead of a constantly repainting gradient. */
+    .glass-light::after {
+      animation: none;
+      opacity: 0.32;
+      background-position: 30% 20%;
+    }
+
+    .glass-hover:hover {
+      transform: none;
     }
   }
 
@@ -424,6 +469,91 @@
   .player-range:focus-visible::-webkit-slider-thumb {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
   }
+
+  /* Player visual -------------------------------------------------------- */
+  /* The stage clips its own decorations, so no glow ever reaches the page. */
+  .player-stage {
+    position: relative;
+    overflow: clip;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    background:
+      radial-gradient(120% 100% at 18% 0%, rgba(236, 238, 242, 0.08), transparent 58%),
+      radial-gradient(90% 90% at 92% 100%, rgba(182, 176, 196, 0.1), transparent 62%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(0, 0, 0, 0.25));
+    contain: paint;
+  }
+
+  .player-stage-glow {
+    position: absolute;
+    inset: -20% -10%;
+    pointer-events: none;
+    background:
+      radial-gradient(38% 46% at 26% 32%, rgba(236, 238, 242, 0.16), transparent 70%),
+      radial-gradient(34% 40% at 74% 68%, rgba(182, 176, 196, 0.16), transparent 70%);
+    animation: player-drift 16s ease-in-out infinite;
+  }
+
+  .wave {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 100%;
+    padding: 0 10px;
+    --progress: 0;
+  }
+
+  .wave-bars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 0 10px;
+  }
+
+  .wave-bar {
+    flex: 1 1 0;
+    min-width: 1px;
+    max-width: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    transform-origin: center;
+  }
+
+  /* Played part of the waveform, clipped by the progress variable. */
+  .wave-bars-active {
+    clip-path: inset(0 calc(100% - var(--progress) * 100%) 0 0);
+  }
+
+  .wave-bars-active .wave-bar {
+    background: linear-gradient(180deg, #ffffff, #c9c4d6);
+  }
+
+  .wave.is-playing .wave-bar {
+    animation: wave-breathe 2.6s ease-in-out infinite;
+  }
+
+  @media (max-width: 640px) {
+    .wave,
+    .wave-bars {
+      gap: 3px;
+      padding: 0 6px;
+    }
+
+    /* Half the bars keeps the same silhouette at a fraction of the cost. */
+    .wave-bar:nth-child(2n) {
+      display: none;
+    }
+
+    /* Progress still animates through the clip, so no per bar keyframes are needed. */
+    .wave.is-playing .wave-bar {
+      animation: none;
+    }
+  }
 }
 
 @layer utilities {
@@ -533,6 +663,26 @@
   }
   100% {
     transform: translateY(400%);
+  }
+}
+
+@keyframes player-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes wave-breathe {
+  0%,
+  100% {
+    transform: scaleY(0.72);
+  }
+  50% {
+    transform: scaleY(1);
   }
 }
 

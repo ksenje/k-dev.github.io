@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { usePrefersReducedMotion } from '../../hooks/useEnvironment'
+import { useIsTouch, usePrefersReducedMotion } from '../../hooks/useEnvironment'
 import { easeSpring } from '../../lib/motion'
 
 type RevealProps = {
@@ -16,14 +16,17 @@ type RevealProps = {
 
 export function Reveal({ children, className = '', delay = 0, y = 28, blur = true, once = true }: RevealProps) {
   const reduced = usePrefersReducedMotion()
+  const isTouch = useIsTouch()
+  // Blur transitions are repainted every frame: cheap on desktop, costly on phones.
+  const useBlur = blur && !reduced && !isTouch
 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: reduced ? 0 : y, filter: blur && !reduced ? 'blur(14px)' : 'none' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      initial={{ opacity: 0, y: reduced || isTouch ? 0 : y, filter: useBlur ? 'blur(14px)' : 'none' }}
+      whileInView={{ opacity: 1, y: 0, filter: useBlur ? 'blur(0px)' : 'none' }}
       viewport={{ once, margin: '0px 0px -12% 0px' }}
-      transition={{ duration: 0.9, delay, ease: easeSpring }}
+      transition={{ duration: isTouch ? 0.5 : 0.9, delay, ease: easeSpring }}
     >
       {children}
     </motion.div>
@@ -47,13 +50,11 @@ export function SectionHeading({
   align = 'left',
   className = '',
 }: SectionHeadingProps) {
-  const reduced = usePrefersReducedMotion()
-
   return (
     <div className={`${align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'} ${className}`}>
       <Reveal>
         <div className={`mono-label flex items-center gap-3 ${align === 'center' ? 'justify-center' : ''}`}>
-          <span className="inline-block h-px w-8 bg-gradient-to-r from-transparent to-glacier/70" />
+          <span aria-hidden="true" className="inline-block h-px w-8 bg-gradient-to-r from-transparent to-glacier/70" />
           {eyebrow}
         </div>
       </Reveal>
@@ -70,8 +71,6 @@ export function SectionHeading({
           <p className="mt-5 text-[0.98rem] leading-relaxed text-frost-300/90">{description}</p>
         </Reveal>
       ) : null}
-
-      {!reduced ? null : <span className="sr-only">{title}</span>}
     </div>
   )
 }

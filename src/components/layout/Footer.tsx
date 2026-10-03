@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { identity, navItems } from '../../data/site'
 import { useRevealProps } from '../../lib/motion'
 
@@ -6,7 +6,7 @@ export function Footer() {
   const reveal = useRevealProps()
 
   return (
-    <footer className="relative z-20 px-4 pb-28 sm:px-6 sm:pb-32">
+    <footer className="relative z-20 px-4 pt-8 pb-10 sm:px-6 sm:pb-12">
       <motion.div
         className="glass glass-light mx-auto max-w-6xl rounded-[26px] px-5 py-6 sm:px-7"
         initial={reveal.initial}
