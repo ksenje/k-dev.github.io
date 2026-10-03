@@ -1,4 +1,50 @@
 {
   "disabled": false,
-  "tracks": []
+  "tracks": [
+    {
+      "title": "Вечер выпускников",
+      "audio": "./audio/vecher-vypusknikov.mp3"
+    },
+    {
+      "title": "Выстрел в пустоту",
+      "audio": "./audio/vystrel-v-pustotu.mp3"
+    },
+    {
+      "title": "Город Мёрвых Идей",
+      "audio": "./audio/gorod-mervyh-idey.mp3"
+    },
+    {
+      "title": "Деп",
+      "audio": "./audio/dep.mp3"
+    },
+    {
+      "title": "Интерпол",
+      "audio": "./audio/interpol.mp3"
+    },
+    {
+      "title": "Мёртвый сон",
+      "audio": "./audio/mertvyy-son.mp3"
+    },
+    {
+      "title": "Мёртвый фрик",
+      "audio": "./audio/mertvyy-frik.mp3"
+    },
+    {
+      "title": "Пьяная ты",
+      "audio": "./audio/pyanaya-ty.mp3"
+    },
+    {
+      "title": "Точно один",
+      "audio": "./audio/tochno-odin.mp3"
+    },
+    {
+      "title": "Россия",
+      "audio": "./audio/rossiya.mp3"
+    },
+    {
+      "title": "Тело похудело - КОРЗА (youtube)",
+      "audio": "./audio/telo-pohudelo-korza-youtube.m4a",
+      "published": false
+    }
+  ]
 }

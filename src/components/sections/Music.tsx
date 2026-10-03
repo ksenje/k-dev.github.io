@@ -1,6 +1,5 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { usePlayer } from '../music/PlayerProvider'
-import { formatTime } from '../../lib/format'
 import { music } from '../../data/site'
 import { SectionHeading } from '../ui/Reveal'
 import { GlassPanel } from '../ui/GlassPanel'
@@ -44,12 +43,8 @@ export function Music() {
                         className="flex w-full items-center gap-3.5 rounded-[18px] p-1.5 text-left transition-colors duration-300 hover:bg-white/4"
                         aria-label={`${isPlaying && active ? 'Пауза' : 'Слушать'}: ${track.title}`}
                       >
-                        <TrackArtwork track={track} active={active} isPlaying={isPlaying} />
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-[0.95rem] font-medium text-frost-50">{track.title}</p>
-                          <p className="truncate text-[0.82rem] text-frost-400">
-                            {track.artist} · {formatTime(track.duration)}
-                          </p>
                         </div>
                         <span className="btn btn-ghost btn-sm shrink-0 !px-3">
                           {active && isPlaying ? <PauseIcon className="h-4 w-4" /> : <PlayIcon className="h-4 w-4" />}
@@ -64,58 +59,5 @@ export function Music() {
         </div>
       </div>
     </section>
-  )
-}
-
-function TrackArtwork({
-  track,
-  active,
-  isPlaying,
-}: {
-  track: { id: number; title: string; coverUrl: string | null }
-  active: boolean
-  isPlaying: boolean
-}) {
-  if (track.coverUrl) {
-    return (
-      <img
-        src={track.coverUrl}
-        alt=""
-        width={56}
-        height={56}
-        loading="lazy"
-        className="h-14 w-14 shrink-0 rounded-[16px] border border-white/10 object-cover"
-      />
-    )
-  }
-
-  return (
-    <div
-      className={`grid h-14 w-14 shrink-0 place-items-center rounded-[16px] border border-white/10 transition-colors duration-500 ${
-        active ? 'bg-white/10 text-frost-50' : 'bg-white/5 text-frost-400'
-      }`}
-    >
-      {active && isPlaying ? (
-        <Equalizer />
-      ) : (
-        <span className="font-mono text-[0.72rem]">{track.id.toString().padStart(2, '0')}</span>
-      )}
-    </div>
-  )
-}
-
-function Equalizer() {
-  return (
-    <span aria-hidden="true" className="flex h-4 items-end gap-[3px]">
-      {[0, 1, 2].map((bar) => (
-        <motion.span
-          key={bar}
-          className="w-[3px] rounded-full bg-current"
-          animate={{ height: ['30%', '100%', '45%', '85%', '30%'] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut', delay: bar * 0.18 }}
-          style={{ height: '40%' }}
-        />
-      ))}
-    </span>
   )
 }
