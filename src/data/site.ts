@@ -54,7 +54,7 @@ export const skills = {
   groups: [
     {
       title: 'Разработка',
-      items: ['Python', 'JavaScript', 'TypeScript', 'Kotlin', 'Lua', 'Rust', 'Go', 'SQL'],
+      items: ['Python', 'JavaScript', 'TypeScript', 'Kotlin', 'Java', 'Lua', 'Rust', 'Go', 'SQL', 'HTML', 'CSS'],
     },
     {
       title: 'Инструменты',

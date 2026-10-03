@@ -20,6 +20,8 @@ type PlayerState = {
   duration: number
   volume: number
   muted: boolean
+  /** Live Web Audio analyser for visualisations. Null until playback starts. */
+  analyserRef: { current: AnalyserNode | null }
   refresh: () => Promise<void>
   playTrack: (track: Track) => void
   toggle: () => void
@@ -40,6 +42,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const tracksRef = useRef<Track[]>([])
   const currentIdRef = useRef<number | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+  const analyserRef = useRef<AnalyserNode | null>(null)
+  const graphReadyRef = useRef(false)
 
   // The bundled catalogue is read synchronously, so the common case renders the
   // catalogue on the first pass instead of flashing a loading state.
@@ -79,6 +84,44 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  // The graph is built lazily on the first play (a user gesture), so the
+  // AudioContext is never created before it is allowed to run.
+  const initAudioGraph = useCallback(() => {
+    const ctx = audioCtxRef.current
+    if (graphReadyRef.current) {
+      if (ctx && ctx.state === 'suspended') void ctx.resume()
+      return
+    }
+    const audio = audioRef.current
+    if (!audio) return
+    try {
+      const Ctor =
+        window.AudioContext ??
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+      if (!Ctor) return
+      const context = new Ctor()
+      const source = context.createMediaElementSource(audio)
+      const analyser = context.createAnalyser()
+      analyser.fftSize = 256
+      analyser.smoothingTimeConstant = 0.8
+      source.connect(analyser)
+      analyser.connect(context.destination)
+      audioCtxRef.current = context
+      analyserRef.current = analyser
+      graphReadyRef.current = true
+      if (context.state === 'suspended') void context.resume()
+    } catch {
+      analyserRef.current = null
+    }
+  }, [])
+
+  const safePlay = useCallback(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    initAudioGraph()
+    void audio.play().catch(() => setIsPlaying(false))
+  }, [initAudioGraph])
+
   // A single audio element for the whole site: nothing is fetched until a track
   // is picked, and only the active file is ever buffered.
   useEffect(() => {
@@ -97,7 +140,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const index = list.findIndex((track) => track.id === currentIdRef.current)
       const nextTrack = index >= 0 && index < list.length - 1 ? list[index + 1] : null
       if (!nextTrack) {
-        // Keep the last frame so the waveform and seek bar visibly reach the end.
+        // Keep the last frame so the cover and seek bar visibly reach the end.
         setCurrentTime(Number.isFinite(audio.duration) ? audio.duration : 0)
         setIsPlaying(false)
         return
@@ -106,7 +149,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setCurrentTime(0)
       setDuration(nextTrack.duration ?? 0)
       audio.src = nextTrack.audioUrl
-      void audio.play().catch(() => setIsPlaying(false))
+      safePlay()
       updateMediaSession(nextTrack)
     }
     const onError = () => {
@@ -175,7 +218,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setError(null)
 
       if (currentId === track.id) {
-        if (audio.paused) void audio.play().catch(() => setIsPlaying(false))
+        if (audio.paused) safePlay()
         else audio.pause()
         return
       }
@@ -184,10 +227,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setCurrentTime(0)
       setDuration(track.duration ?? 0)
       audio.src = track.audioUrl
-      void audio.play().catch(() => setIsPlaying(false))
+      safePlay()
       updateMediaSession(track)
     },
-    [currentId, updateMediaSession],
+    [currentId, safePlay, updateMediaSession],
   )
 
   const toggle = useCallback(() => {
@@ -198,9 +241,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       playTrack(current)
       return
     }
-    if (audio.paused) void audio.play().catch(() => setIsPlaying(false))
+    if (audio.paused) safePlay()
     else audio.pause()
-  }, [current, currentId, playTrack])
+  }, [current, currentId, playTrack, safePlay])
 
   const playAt = useCallback((index: number) => {
     const track = tracksRef.current[index]
@@ -221,10 +264,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     const audio = audioRef.current
     if (audio) {
       audio.src = track.audioUrl
-      void audio.play().catch(() => setIsPlaying(false))
+      safePlay()
     }
     updateMediaSession(track)
-  }, [updateMediaSession])
+  }, [safePlay, updateMediaSession])
 
   const next = useCallback(() => step(1), [step])
   const previous = useCallback(() => step(-1), [step])
@@ -255,7 +298,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return
     const handlers: [MediaSessionAction, () => void][] = [
-      ['play', () => void audioRef.current?.play().catch(() => setIsPlaying(false))],
+      ['play', () => safePlay()],
       ['pause', () => audioRef.current?.pause()],
       ['nexttrack', next],
       ['previoustrack', previous],
@@ -276,7 +319,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         }
       }
     }
-  }, [next, previous])
+  }, [next, previous, safePlay])
 
   const value: PlayerState = {
     tracks,
@@ -288,6 +331,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     duration,
     volume,
     muted,
+    analyserRef,
     refresh,
     playTrack,
     toggle,

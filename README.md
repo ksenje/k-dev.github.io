@@ -1,6 +1,10 @@
-# kсенже — Developer & Music
+# kсенже — Developer
 
-Личный сайт: разработка на Python и собственная музыка. Тёмная тема, liquid glass, снег.
+Личный сайт: разработка и собственные проекты, плюс небольшой встроенный плеер.
+Монохромный liquid glass, анимированный фон и интерактивная «обложка», которая
+переливается как жидкость и реагирует на звук трека.
+
+Живая версия: **https://ksenje.github.io/**
 
 Стек: React 19 · TypeScript · Vite · Tailwind CSS 4 · Framer Motion
 
@@ -35,23 +39,26 @@ Workflow передаёт `SITE_URL`, поэтому `og:image`, иконки и
 
 ## Content
 
-Весь текст — в `src/data/site.ts`: имя, роль, заголовок, разделы, контакты, TON-адрес.
-Контакты публичные: `@root_me`, `@send`, `@xrocket`.
+Весь текст — в `src/data/site.ts`: имя, роль, заголовок, разделы, навыки, контакты, реквизиты.
+
+- Контакты: Telegram `@root_me`, VK `@rooot_me`.
+- Оплата: xRocket `@xrocket`, Send `@send`, публичный TON-адрес для переводов.
+
+Приватные ключи и seed-фразы на сайте не хранятся и в репозиторий не попадают.
 
 ## Music catalogue
 
-Каталог статический: `src/data/catalog.json` + файлы в `public/audio/` и `public/covers/`.
+Каталог статический: `src/data/catalog.json` + аудиофайлы в `public/audio/`.
 
 ```json
 {
+  "disabled": false,
   "tracks": [
     {
       "title": "Название трека",
-      "artist": "kсенже",
-      "description": "Короткое описание.",
       "audio": "./audio/track-name.mp3",
-      "cover": "./covers/track-name.jpg",
-      "duration": 214
+      "duration": 214,
+      "published": true
     }
   ]
 }
@@ -61,10 +68,14 @@ Workflow передаёт `SITE_URL`, поэтому `og:image`, иконки и
 - `duration` в секундах; при отсутствии берётся длительность файла.
 - `published: false` оставляет запись в файле, но прячет трек из каталога.
 - Каталог можно отключить целиком: `"disabled": true`.
-- Аудио кладётся в `public/audio/`, обложки — в `public/covers/`.
 
 Если каталог лежит на отдельном хостинге, задайте `VITE_CATALOG_URL` на этапе сборки —
 сайт возьмёт треки оттуда и откатится к файлу из репозитория, если endpoint недоступен.
+
+Плеер встроен прямо в секцию «Музыка». Отдельной панели внизу страницы нет. Аудио
+грузится только после нажатия Play. Визуализация обложки построена на Web Audio API
+(`AnalyserNode`): плавные светящиеся пятна переливаются и реагируют на частоты трека,
+на паузе жидкость успокаивается. Анализ звука включается при первом воспроизведении.
 
 ## Privacy
 
@@ -85,7 +96,7 @@ Workflow передаёт `SITE_URL`, поэтому `og:image`, иконки и
 src/
   App.tsx                  page composition and layer order
   main.tsx                 static entry point
-  data/site.ts             all copy: identity, sections, contacts
+  data/site.ts             all copy: identity, sections, skills, contacts, payments
   data/catalog.json        music catalogue
   index.css                design tokens, liquid glass system, keyframes
   hooks/useEnvironment.ts  media queries, device tier, reduced motion
@@ -95,28 +106,32 @@ src/
     motion.ts              shared easings, springs, reveal helpers
     pointer.ts             single rAF pointer bus, custom cursor toggle
   components/
-    effects/               snowfall canvas, cursor light, cursor, aurora
+    effects/               snowfall canvas, cursor light, custom cursor, aurora
     layout/                navbar, footer
-    music/                 player provider, bottom player
-    sections/              hero, about, music, skills, contact
-    ui/                    glass panel, button, reveal, icons
+    music/                 player provider (state, audio element, analyser)
+    sections/              hero, about, music, skills, payments, contact
+    ui/                    glass panel, button, reveal, icons, liquid cover
 public/
-  audio/, covers/          media files for the catalogue (.gitkeep only)
-scripts/postbuild.mjs      404.html and absolute OG URLs
+  audio/                   audio files for the catalogue
+  favicon.png              site icon (from the avatar)
+  apple-touch-icon.png     iOS home screen icon
+  og.png                   social preview image
+scripts/postbuild.mjs      404.html redirect and absolute OG URLs
 ```
 
 ## Layer order
 
-1. `AuroraBackground` — cold moving light sources
-2. snowfall (back) — canvas behind all glass
-3. `CursorLight` — pointer following light
-4. content — glass surfaces
-5. snowfall (mid + front) — canvas in front of the glass
-6. custom cursor
+1. `Intro` — brief black fade on first load
+2. `AuroraBackground` — cold moving light sources
+3. `Snowfall` — one canvas behind all glass
+4. `CursorLight` — pointer following light
+5. `Navbar` + content — glass surfaces
+6. `Footer`
+7. `CustomCursor`
 
 ## Performance and accessibility
 
-- Snowfall renders on canvas, no DOM particles, paused when the tab is hidden.
+- Snowfall and the liquid cover render on canvas, no DOM particles, paused when off screen.
 - Particle counts and blur cost scale with device tier; touch devices get the light budget.
 - Cursor light, tilt and custom cursor are disabled on coarse pointers.
 - `prefers-reduced-motion` removes travel, blur reveals, float loops and cursor glow.

@@ -3,9 +3,8 @@ import { formatTime } from '../../lib/format'
 import { music } from '../../data/site'
 import { SectionHeading } from '../ui/Reveal'
 import { GlassPanel } from '../ui/GlassPanel'
+import { LiquidCover } from '../ui/LiquidCover'
 import { MuteIcon, NextIcon, PauseIcon, PlayIcon, PreviousIcon, VolumeIcon } from '../ui/Icons'
-
-const RINGS = [0, 1.4, 2.8]
 
 export function Music() {
   const { tracks, loading, error, current, isPlaying, currentTime, duration, volume, muted, toggle, next, previous, seek, setVolume, toggleMute } =
@@ -49,13 +48,7 @@ export function Music() {
                   <p className="text-sm text-frost-400">{music.emptyTitle}</p>
                 </div>
               ) : (
-                <div className={`cover ${isPlaying ? 'is-playing' : ''}`} aria-hidden="true">
-                  <span className="cover-sheen" />
-                  <span className="cover-orb" />
-                  {RINGS.map((delay) => (
-                    <span key={delay} className="cover-ring" style={{ animationDelay: `${delay}s` }} />
-                  ))}
-                </div>
+                <LiquidCover />
               )}
             </div>
 
