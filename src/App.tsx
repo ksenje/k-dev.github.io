@@ -11,12 +11,14 @@ import { Music } from './components/sections/Music'
 import { Skills } from './components/sections/Skills'
 import { Contact } from './components/sections/Contact'
 import { MusicPlayer } from './components/music/MusicPlayer'
+import { usePlayer } from './components/music/PlayerProvider'
 import { useCustomCursorEnabled } from './lib/pointer'
 import { usePrefersReducedMotion } from './hooks/useEnvironment'
 
 export default function App() {
   useCustomCursorEnabled()
   const reduced = usePrefersReducedMotion()
+  const { tracks } = usePlayer()
 
   return (
     <div className="relative min-h-screen">
@@ -36,7 +38,7 @@ export default function App() {
       <main className="relative z-10">
         <Hero />
         <About />
-        <Music />
+        {tracks.length > 0 ? <Music /> : null}
         <Skills />
         <Contact />
       </main>

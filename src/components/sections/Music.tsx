@@ -1,15 +1,13 @@
 import { motion } from 'framer-motion'
 import { usePlayer } from '../music/PlayerProvider'
 import { formatTime } from '../../lib/format'
-import { useRevealProps } from '../../lib/motion'
 import { music } from '../../data/site'
 import { SectionHeading } from '../ui/Reveal'
 import { GlassPanel } from '../ui/GlassPanel'
-import { MusicNoteIcon, PauseIcon, PlayIcon } from '../ui/Icons'
+import { PauseIcon, PlayIcon } from '../ui/Icons'
 
 export function Music() {
   const { tracks, loading, error, current, isPlaying, playTrack } = usePlayer()
-  const reveal = useRevealProps()
 
   return (
     <section id="music" className="section relative px-4 py-24 sm:px-6 sm:py-32">
@@ -17,8 +15,7 @@ export function Music() {
         <SectionHeading
           eyebrow={music.eyebrow}
           title={music.title}
-          highlight={music.highlight}
-          description="Собственные треки. Плеер появляется внизу экрана, когда вы нажмёте «Слушать»."
+          description="Плеер появляется внизу экрана, когда вы нажмёте «Слушать»."
         />
 
         <div className="mt-12">
@@ -28,15 +25,7 @@ export function Music() {
             <GlassPanel className="p-6">
               <p className="text-sm text-frost-300">{error}</p>
             </GlassPanel>
-          ) : tracks.length === 0 ? (
-            <GlassPanel className="p-10 text-center" reveal {...reveal}>
-              <div className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-white/10 bg-white/5 text-frost-300">
-                <MusicNoteIcon className="h-5 w-5" />
-              </div>
-              <p className="mt-4 text-base font-medium text-frost-50">{music.emptyTitle}</p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-frost-400">{music.emptyText}</p>
-            </GlassPanel>
-          ) : (
+          ) : tracks.length === 0 ? null : (
             <ul className="grid gap-3 sm:grid-cols-2">
               {tracks.map((track, index) => {
                 const active = current?.id === track.id

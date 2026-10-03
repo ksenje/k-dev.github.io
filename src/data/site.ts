@@ -4,8 +4,8 @@
  */
 export const identity = {
   name: 'kсенже',
-  role: 'Python Developer',
-  headline: 'Музыка, разработка и собственные проекты.',
+  role: 'Developer',
+  headline: 'Разработка и собственные проекты.',
   copyright: '© kсенже',
 }
 
@@ -29,16 +29,14 @@ export const navItems: NavItem[] = [
 /** About copy: no invented experience, numbers or achievements. */
 export const about = {
   eyebrow: 'Обо мне',
-  title: 'Python-разработчик',
-  highlight: 'и музыкант',
+  title: 'Разработчик',
+  highlight: 'и автоматизатор',
   paragraphs: [
-    'Я Python-разработчик, занимаюсь созданием программ и IT-решений.',
+    'Я занимаюсь созданием программ и IT-решений.',
     'Разрабатываю Telegram-ботов, сайты, веб-приложения, автоматизацию и собственные цифровые продукты.',
-    'Параллельно пишу музыку. Здесь появляются опубликованные треки.',
   ],
   cards: [
     { title: 'Разработка', text: 'Программы, боты, сайты и автоматизация под задачу.' },
-    { title: 'Музыка', text: 'Собственные треки, публикуемые на этом сайте.' },
     { title: 'Проекты', text: 'Работаю и довожу до результата то, что делаю сам.' },
   ],
 }
@@ -65,10 +63,7 @@ export const skills = {
 
 export const music = {
   eyebrow: 'Музыка',
-  title: 'Мои треки',
-  highlight: 'здесь',
-  emptyTitle: 'Треков пока нет',
-  emptyText: 'Здесь появляются опубликованные треки. Каталог обновляется вместе с репозиторием.',
+  title: 'Музыка',
 }
 
 export const contact = {
