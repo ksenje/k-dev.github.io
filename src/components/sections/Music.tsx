@@ -1,31 +1,19 @@
-﻿import { useEffect, useRef } from 'react'
-import { usePlayer } from '../music/PlayerProvider'
+﻿import { usePlayer } from '../music/PlayerProvider'
 import { formatTime } from '../../lib/format'
 import { music } from '../../data/site'
 import { SectionHeading } from '../ui/Reveal'
 import { GlassPanel } from '../ui/GlassPanel'
 import { MuteIcon, NextIcon, PauseIcon, PlayIcon, PreviousIcon, VolumeIcon } from '../ui/Icons'
 
-/** Deterministic bar heights: same silhouette on every render, no audio analysis. */
-const BARS = 48
-const HEIGHTS = Array.from({ length: BARS }, (_, index) => {
-  const wave = Math.abs(Math.sin(index * 0.62) * 0.55 + Math.cos(index * 0.29) * 0.45)
-  return 0.18 + wave * 0.82
-})
+const RINGS = [0, 1.4, 2.8]
 
 export function Music() {
   const { tracks, loading, error, current, isPlaying, currentTime, duration, volume, muted, toggle, next, previous, seek, setVolume, toggleMute } =
     usePlayer()
 
-  const waveRef = useRef<HTMLDivElement | null>(null)
   const total = duration || current?.duration || 0
   const progress = total > 0 ? Math.min(1, currentTime / total) : 0
   const volumeLevel = muted ? 0 : volume
-
-  // The progress line is a CSS variable, so playback never re-renders the bar list.
-  useEffect(() => {
-    waveRef.current?.style.setProperty('--progress', progress.toFixed(4))
-  }, [progress])
 
   return (
     <section id="music" className="section relative px-4 py-24 sm:px-6 lg:py-32">
@@ -61,13 +49,12 @@ export function Music() {
                   <p className="text-sm text-frost-400">{music.emptyTitle}</p>
                 </div>
               ) : (
-                <div
-                  ref={waveRef}
-                  className={`wave h-full ${isPlaying ? 'is-playing' : ''}`}
-                  aria-hidden="true"
-                >
-                  <WaveBars />
-                  <WaveBars active />
+                <div className={`cover ${isPlaying ? 'is-playing' : ''}`} aria-hidden="true">
+                  <span className="cover-sheen" />
+                  <span className="cover-orb" />
+                  {RINGS.map((delay) => (
+                    <span key={delay} className="cover-ring" style={{ animationDelay: `${delay}s` }} />
+                  ))}
                 </div>
               )}
             </div>
@@ -163,22 +150,5 @@ export function Music() {
         </div>
       </div>
     </section>
-  )
-}
-
-function WaveBars({ active = false }: { active?: boolean }) {
-  return (
-    <div className={`wave-bars ${active ? 'wave-bars-active' : ''}`}>
-      {HEIGHTS.map((height, index) => (
-        <span
-          key={index}
-          className="wave-bar"
-          style={{
-            height: `${Math.round(height * 100)}%`,
-            animationDelay: `${(index % 7) * 0.14}s`,
-          }}
-        />
-      ))}
-    </div>
   )
 }
