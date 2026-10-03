@@ -25,7 +25,7 @@ export function useRevealProps(delay = 0, y = 26) {
   const filter = reduced || isTouch ? 'none' : 'blur(12px)'
   return {
     initial: { opacity: 0, y: reduced || isTouch ? 0 : y, filter },
-    whileInView: { opacity: 1, y: 0, filter },
+    whileInView: { opacity: 1, y: 0, filter: reduced || isTouch ? 'none' : 'blur(0px)' },
     viewport: { once: true },
     transition: { duration: reduced || isTouch ? 0.4 : 0.9, delay: reduced ? 0 : delay, ease: easeSpring },
   }
