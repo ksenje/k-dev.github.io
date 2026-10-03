@@ -158,8 +158,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     void refresh()
   }, [refresh])
 
+  // The first track is shown (and playable) before any explicit pick, so the
+  // player never opens in a disabled, title-less state. No audio is fetched yet.
   const current = useMemo(
-    () => tracks.find((track) => track.id === currentId) ?? null,
+    () => tracks.find((track) => track.id === currentId) ?? tracks[0] ?? null,
     [tracks, currentId],
   )
 
@@ -187,10 +189,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
   const toggle = useCallback(() => {
     const audio = audioRef.current
-    if (!audio || currentId === null) return
+    if (!audio) return
+    if (!current) return
+    if (currentId !== current.id) {
+      playTrack(current)
+      return
+    }
     if (audio.paused) void audio.play().catch(() => setIsPlaying(false))
     else audio.pause()
-  }, [currentId])
+  }, [current, currentId, playTrack])
 
   const playAt = useCallback((index: number) => {
     const track = tracksRef.current[index]
@@ -200,8 +207,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const step = useCallback((delta: number) => {
     const list = tracksRef.current
     if (!list.length) return
-    const index = list.findIndex((track) => track.id === currentId)
-    const nextIndex = index < 0 ? 0 : (index + delta + list.length) % list.length
+    const index = list.findIndex((track) => track.id === currentIdRef.current)
+    const base = index < 0 ? 0 : index
+    const nextIndex = (base + delta + list.length) % list.length
     const track = list[nextIndex]
     if (!track) return
     setCurrentId(track.id)
@@ -213,7 +221,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       void audio.play().catch(() => setIsPlaying(false))
     }
     updateMediaSession(track)
-  }, [currentId, updateMediaSession])
+  }, [updateMediaSession])
 
   const next = useCallback(() => step(1), [step])
   const previous = useCallback(() => step(-1), [step])

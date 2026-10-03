@@ -72,7 +72,7 @@ export const music = {
   title: 'Музыка',
   description: 'Плеер находится в этой секции и прокручивается вместе со страницей.',
   emptyTitle: 'Каталог пуст',
-  playLabel: 'Слушать',
+  playLabel: 'Воспроизвести',
   pauseLabel: 'Пауза',
   previousLabel: 'Предыдущий трек',
   nextLabel: 'Следующий трек',
@@ -80,7 +80,7 @@ export const music = {
   volumeLabel: 'Громкость',
   muteOnLabel: 'Включить звук',
   muteOffLabel: 'Выключить звук',
-  idleTitle: 'Нажмите Play',
+  idleTitle: 'Готово к воспроизведению',
 }
 
 export const paymentsSection = {
