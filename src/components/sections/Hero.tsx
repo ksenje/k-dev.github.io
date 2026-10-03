@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { contacts, identity } from '../../data/site'
+import { identity } from '../../data/site'
 import { useStepSequence } from '../../lib/motion'
 import { GlassButton } from '../ui/GlassButton'
-import { TelegramIcon } from '../ui/Icons'
 import avatarUrl from '../../assets/avatar.jpg'
 
 export function Hero() {
@@ -18,7 +17,6 @@ export function Hero() {
   const name = identity.name
   const role = identity.role
   const headline = identity.headline
-  const telegramUrl = contacts.telegram.url
 
   return (
     <section id="home" className="section relative flex min-h-[100svh] items-center px-4 pt-28 pb-20 sm:px-6 sm:pt-32">
@@ -57,11 +55,6 @@ export function Hero() {
             animate={step(3).visible}
             variants={step(3)}
           >
-            <GlassButton href={telegramUrl} external variant="primary">
-              <TelegramIcon className="h-4 w-4" />
-              Написать в Telegram
-            </GlassButton>
-
             <GlassButton href="#contact">Контакты</GlassButton>
           </motion.div>
 

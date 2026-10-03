@@ -49,9 +49,6 @@ export function Payments() {
           {methods.map((method, index) => (
             <GlassPanel key={method.key} reveal delay={0.06 * index} variant="soft" className="flex flex-col p-5">
               <div className="flex items-center gap-2.5">
-                <span aria-hidden="true" className="text-base leading-none">
-                  {method.key === 'xrocket' ? '🚀' : '📨'}
-                </span>
                 <h3 className="text-[0.98rem] font-medium tracking-tight text-frost-50">{method.title}</h3>
               </div>
               <p className="mt-3 font-mono text-[0.95rem] text-frost-200">{method.handle}</p>
@@ -69,9 +66,6 @@ export function Payments() {
 
           <GlassPanel reveal delay={0.12} variant="soft" className="flex flex-col p-5">
             <div className="flex items-center gap-2.5">
-              <span aria-hidden="true" className="text-base leading-none">
-                💎
-              </span>
               <h3 className="text-[0.98rem] font-medium tracking-tight text-frost-50">TON</h3>
             </div>
 

@@ -33,7 +33,6 @@ export function Music() {
         <SectionHeading
           eyebrow={music.eyebrow}
           title={music.title}
-          description={music.description}
           align="center"
         />
 
@@ -79,7 +78,7 @@ export function Music() {
                   aria-live="polite"
                   className="truncate text-[1.02rem] font-medium tracking-tight text-frost-50"
                 >
-                  {current ? current.title : music.idleTitle}
+                  {current?.title ?? ''}
                 </p>
               </div>
 

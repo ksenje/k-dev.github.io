@@ -17,8 +17,6 @@ function ChannelMark({ title }: { title: string }) {
 }
 
 export function Contact() {
-  const telegram = contact.channels[0]
-
   return (
     <section id="contact" className="section relative px-4 py-24 sm:px-6 lg:py-32">
       <div className="mx-auto max-w-6xl">
@@ -47,18 +45,6 @@ export function Contact() {
               <p className="mx-auto mt-6 max-w-[48ch] text-[0.97rem] leading-relaxed text-frost-200/85">
                 {contact.text}
               </p>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <a
-                href={telegram.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary mt-9"
-              >
-                <TelegramIcon className="h-[18px] w-[18px]" />
-                {contact.button}
-              </a>
             </Reveal>
           </div>
 

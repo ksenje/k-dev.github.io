@@ -70,7 +70,6 @@ export const skills = {
 export const music = {
   eyebrow: 'Музыка',
   title: 'Музыка',
-  description: 'Плеер находится в этой секции и прокручивается вместе со страницей.',
   emptyTitle: 'Каталог пуст',
   playLabel: 'Воспроизвести',
   pauseLabel: 'Пауза',
@@ -80,7 +79,6 @@ export const music = {
   volumeLabel: 'Громкость',
   muteOnLabel: 'Включить звук',
   muteOffLabel: 'Выключить звук',
-  idleTitle: 'Готово к воспроизведению',
 }
 
 export const paymentsSection = {
@@ -99,9 +97,8 @@ export const contact = {
   title: 'Связаться',
   highlight: 'со мной',
   text: 'Напишите в Telegram, если хотите обсудить проект или задачу.',
-  button: 'Написать в Telegram',
   channels: [
     { key: 'telegram', title: 'Telegram', handle: '@root_me', url: 'https://t.me/root_me', cta: 'Написать' },
-    { key: 'vk', title: 'VK', handle: '@rooot_me', url: 'https://vk.com/rooot_me', cta: 'Открыть' },
+    { key: 'vk', title: 'VK', handle: '@rooot_me', url: 'https://vk.com/rooot_me', cta: 'Написать' },
   ],
 }
