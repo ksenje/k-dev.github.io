@@ -49,9 +49,14 @@ function toTrack(entry: Record<string, unknown>, index: number) {
 function fromBundle(): Catalog {
   const data = bundled as { tracks?: Record<string, unknown>[]; disabled?: boolean }
   return {
-    tracks: (data.tracks ?? []).map(toTrack),
+    tracks: (data.tracks ?? []).filter(isPublished).map(toTrack),
     disabled: data.disabled,
   }
+}
+
+/** `published: false` keeps the entry in the repository but hides it from the catalogue. */
+function isPublished(entry: Record<string, unknown>): boolean {
+  return entry.published !== false
 }
 
 /** True when the catalogue ships inside the bundle and needs no request. */
@@ -71,7 +76,7 @@ export async function loadCatalog(): Promise<Catalog> {
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = (await response.json()) as { tracks?: Record<string, unknown>[]; disabled?: boolean }
     return {
-      tracks: (data.tracks ?? []).map(toTrack),
+      tracks: (data.tracks ?? []).filter(isPublished).map(toTrack),
       disabled: data.disabled,
     }
   } catch {
