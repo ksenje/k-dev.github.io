@@ -25,7 +25,7 @@ export function Reveal({ children, className = '', delay = 0, y = 28, blur = tru
       className={className}
       initial={{ opacity: 0, y: reduced || isTouch ? 0 : y, filter: useBlur ? 'blur(14px)' : 'none' }}
       whileInView={{ opacity: 1, y: 0, filter: useBlur ? 'blur(0px)' : 'none' }}
-      viewport={{ once, margin: '0px 0px -12% 0px' }}
+      viewport={{ once }}
       transition={{ duration: isTouch ? 0.5 : 0.9, delay, ease: easeSpring }}
     >
       {children}

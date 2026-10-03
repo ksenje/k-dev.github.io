@@ -3,47 +3,58 @@
   "tracks": [
     {
       "title": "Вечер выпускников",
-      "audio": "./audio/vecher-vypusknikov.mp3"
+      "audio": "./audio/vecher-vypusknikov.mp3",
+      "duration": 171.737
     },
     {
       "title": "Выстрел в пустоту",
-      "audio": "./audio/vystrel-v-pustotu.mp3"
+      "audio": "./audio/vystrel-v-pustotu.mp3",
+      "duration": 206.101
     },
     {
       "title": "Город Мёрвых Идей",
-      "audio": "./audio/gorod-mervyh-idey.mp3"
+      "audio": "./audio/gorod-mervyh-idey.mp3",
+      "duration": 84.664
     },
     {
       "title": "Деп",
-      "audio": "./audio/dep.mp3"
+      "audio": "./audio/dep.mp3",
+      "duration": 190.798
     },
     {
       "title": "Интерпол",
-      "audio": "./audio/interpol.mp3"
+      "audio": "./audio/interpol.mp3",
+      "duration": 189.846
     },
     {
       "title": "Мёртвый сон",
-      "audio": "./audio/mertvyy-son.mp3"
+      "audio": "./audio/mertvyy-son.mp3",
+      "duration": 78.391
     },
     {
       "title": "Мёртвый фрик",
-      "audio": "./audio/mertvyy-frik.mp3"
+      "audio": "./audio/mertvyy-frik.mp3",
+      "duration": 162.168
     },
     {
       "title": "Пьяная ты",
-      "audio": "./audio/pyanaya-ty.mp3"
+      "audio": "./audio/pyanaya-ty.mp3",
+      "duration": 170.331
     },
     {
       "title": "Точно один",
-      "audio": "./audio/tochno-odin.mp3"
+      "audio": "./audio/tochno-odin.mp3",
+      "duration": 114.056
     },
     {
       "title": "Россия",
-      "audio": "./audio/rossiya.mp3"
+      "audio": "./audio/rossiya.mp3",
+      "duration": 108.643
     },
     {
       "title": "Тело похудело - КОРЗА (youtube)",
-      "audio": "./audio/telo-pohudelo-korza-youtube.m4a"
+      "audio": "./audio/telo-pohudelo-korza-youtube.m4a",
+      "duration": 144.762
     }
   ]
 }

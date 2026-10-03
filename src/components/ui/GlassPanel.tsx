@@ -129,7 +129,7 @@ export function GlassPanel({
           : false
       }
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+      viewport={{ once: true }}
       transition={{ duration: isTouch ? 0.5 : 0.95, delay, ease: [0.16, 1, 0.3, 1] }}
       whileHover={lift && !reduced && !isTouch ? { y: -4 } : undefined}
     >

@@ -97,10 +97,13 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const index = list.findIndex((track) => track.id === currentIdRef.current)
       const nextTrack = index >= 0 && index < list.length - 1 ? list[index + 1] : null
       if (!nextTrack) {
+        // Keep the last frame so the waveform and seek bar visibly reach the end.
+        setCurrentTime(Number.isFinite(audio.duration) ? audio.duration : 0)
         setIsPlaying(false)
         return
       }
       setCurrentId(nextTrack.id)
+      setCurrentTime(0)
       setDuration(nextTrack.duration ?? 0)
       audio.src = nextTrack.audioUrl
       void audio.play().catch(() => setIsPlaying(false))
