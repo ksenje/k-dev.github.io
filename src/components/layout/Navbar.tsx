@@ -1,8 +1,7 @@
-﻿import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { navItems, identity } from '../../data/site'
 import { easeSpring, springSoft, useRevealProps } from '../../lib/motion'
-import { usePlayer } from '../music/PlayerProvider'
 import { ArrowIcon, CloseIcon } from '../ui/Icons'
 
 export function Navbar() {
@@ -10,11 +9,6 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('')
   const reveal = useRevealProps()
-  const { tracks } = usePlayer()
-  const items = useMemo(
-    () => (tracks.length > 0 ? navItems : navItems.filter((item) => item.href !== '#music')),
-    [tracks.length],
-  )
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -24,7 +18,7 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    const ids = items.map((item) => item.href.slice(1))
+    const ids = navItems.map((item) => item.href.slice(1))
     const sections = ids
       .map((id) => document.getElementById(id))
       .filter((node): node is HTMLElement => Boolean(node))
@@ -42,7 +36,7 @@ export function Navbar() {
 
     for (const section of sections) observer.observe(section)
     return () => observer.disconnect()
-  }, [items])
+  }, [])
 
   useEffect(() => {
     const root = document.documentElement
@@ -81,7 +75,7 @@ export function Navbar() {
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">
-          {items.map((item) => (
+          {navItems.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
@@ -135,7 +129,7 @@ export function Navbar() {
           >
             <div className="glass glass-strong glass-light overflow-hidden rounded-[24px] p-2">
               <ul className="flex flex-col">
-                {items.map((item, index) => (
+                {navItems.map((item, index) => (
                   <motion.li
                     key={item.href}
                     initial={{ opacity: 0, x: -12 }}
