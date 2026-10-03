@@ -5,28 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:server": "node --watch --env-file-if-exists=.env server/index.ts",
-    "dev:all": "node scripts/dev.mjs",
-    "server": "node --env-file-if-exists=.env server/index.ts",
-    "start": "node --env-file-if-exists=.env server/index.ts",
-    "hash": "node --env-file-if-exists=.env scripts/hash-password.ts",
     "build": "tsc -b && vite build && node scripts/postbuild.mjs",
-    "typecheck:server": "tsc -p tsconfig.server.json --noEmit",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "busboy": "^1.6.0",
-    "express": "^5.2.1",
     "framer-motion": "^14.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@types/busboy": "^1.5.4",
-    "@types/express": "^5.0.6",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

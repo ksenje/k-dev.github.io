@@ -12,11 +12,10 @@ dist
 dist-ssr
 *.local
 
-# Secrets and uploaded media never belong in the repository
+# Secrets never belong in the repository
 .env
 .env.*
 !.env.example
-storage/
 
 # Editor directories and files
 .vscode/*

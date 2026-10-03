@@ -4,8 +4,8 @@
 
 Стек: React 19 · TypeScript · Vite · Tailwind CSS 4 · Framer Motion
 
-Сайт **полностью статический** и публикуется на GitHub Pages: сервера на продакшене нет,
-админки и Telegram-бота в сборке тоже нет.
+Сайт **полностью статический** и публикуется на GitHub Pages: сервера, админки и
+Telegram-бота в проекте нет. Всё, что видит посетитель, лежит в `src/` и `public/`.
 
 ## Commands
 
@@ -21,6 +21,11 @@ npm run lint          # oxlint
 
 `.github/workflows/deploy.yml` публикует `dist/` на GitHub Pages при пуше в `main`.
 В репозитории: Settings → Pages → Source: **GitHub Actions**.
+
+Загрузить файлы можно прямо из браузера: GitHub → **Add file → Upload files**. Это тоже
+коммит в `main`, поэтому Actions соберёт и задеплоит сайт сам. Загружать нужно только
+файлы проекта — `node_modules`, `dist` и `.env` в репозиторий не попадают (они в `.gitignore`),
+а загрузка `node_modules` в браузере всё равно упрётся в лимит GitHub в 100 файлов.
 
 Workflow передаёт `SITE_URL`, поэтому `og:image`, иконки и ссылки в `404.html`
 становятся абсолютными. Своё доменное имя добавляется там же: Settings → Pages → Custom domain.
@@ -65,12 +70,11 @@ Workflow передаёт `SITE_URL`, поэтому `og:image`, иконки и
 
 Репозиторий публичный, поэтому в коммитах не должно быть:
 
-- `.env`, `.env.local` и любых значений токенов, паролей, `TELEGRAM_ADMIN_ID`;
-- базы данных и загруженных медиа (`storage/`), черновиков и закрытых треков;
+- `.env`, `.env.local` и любых значений токенов, паролей, ключей;
+- черновиков и закрытых треков;
 - файлов, которые не предназначены для публичного доступа.
 
-`.gitignore` закрывает `.env*`, `storage/`, `dist` и `node_modules`;
-`.env.example` содержит только пустые placeholders.
+`.gitignore` закрывает `.env*`, `dist` и `node_modules`.
 
 Всё, что лежит в `public/`, попадает и в репозиторий, и в публичную сборку.
 Публиковать нужно только то, что можно показать любому посетителю сайта.
@@ -117,11 +121,3 @@ scripts/postbuild.mjs      404.html and absolute OG URLs
 - Cursor light, tilt and custom cursor are disabled on coarse pointers.
 - `prefers-reduced-motion` removes travel, blur reveals, float loops and cursor glow.
 - `overflow-x: clip` prevents horizontal scrolling on every breakpoint.
-
-## Optional backend
-
-Папка `server/` — предыдущая динамическая версия (Express API, SQLite, загрузка медиа,
-Telegram-бот). В сборку сайта она не входит и на GitHub Pages не запускается: Pages
-умеет отдавать только статические файлы. Код можно использовать локально или удалить.
-
-Ключи для него лежат в `.env` (шаблон — `.env.example`), в репозиторий `.env` не попадает.
